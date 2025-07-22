@@ -1,0 +1,50 @@
+# --- Environnements virtuels ---
+.venv/
+venv/
+env/
+
+# --- Python cache/bytecode ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Build / distribution ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Tests & couverture ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# --- Linters / typage ---
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Logs & données temporaires ---
+*.log
+logs/
+tmp/
+*.sqlite3
+*.db
+
+# --- Variables d'environnement & secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Docker ---
+docker-data/
