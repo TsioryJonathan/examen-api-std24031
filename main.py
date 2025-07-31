@@ -5,6 +5,7 @@ from typing import List
 from starlette.requests import Request
 from datetime import datetime
 import json
+import base64
 
 app = FastAPI()
 
@@ -75,9 +76,27 @@ def modify_post(posts: List[PostModel]):
         status_code=200
     )
     
-
-
-
+@app.get("/ping/auth")
+def read_ping_with_auth(request: Request):
+    valid_username = "admin"
+    valid_password = "123456"
+    authorization_header = request.headers.get("Authorization")
+    if not authorization_header:
+        return JSONResponse(
+            content={"message": "Authorization header is missing"},
+            status_code=401
+        )
+    auth_type, credentials = authorization_header.split(" ")
+    decoded_credentials = base64.b64decode(credentials.encode('utf-8')).decode('utf-8')
+    username, password = decoded_credentials.split(':')
+    if username != valid_username or password != valid_password:
+        return JSONResponse(
+            content={"message": "unauthorized Ressource"},
+            status_code=401
+        )
+    elif username == valid_username and password == valid_password:
+        return Response(content="pong", media_type="text/plain", status_code=200)
+    
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
     with open ("404.html" , "r" , encoding="utf-8") as file:
@@ -87,22 +106,3 @@ def catch_all(full_path: str):
         status_code=404,
         media_type="text/html"
     )
-
-# class User(BaseModel):
-#     name:str
-#     age:int
-
-# users_list: List[User] = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
-
-# def serialized_stored_user():
-#     users_converted = []
-#     for user in users_list:
-#         users_converted.append(user.model_dump())
-#     return users_converted
-
-# @app.post("/user")
-# def postUser(user: User, request: Request):
-#     accept_headers = request.headers.get("Accept")
-#     if accept_headers != "text/plain":
-#         return JSONResponse({"message": "Unsupported Media Type"}, status_code=400)
-#     return JSONResponse({"User": user.model_dump()}, status_code=200)
