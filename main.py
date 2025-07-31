@@ -46,10 +46,16 @@ def serialized_stored_posts():
 def create_post(posts: List[PostModel]):
     for post in posts:
         posts_list.append(post)
-    return Response(
-        content=json.dumps({"Posts": serialized_stored_posts()}),
-        status_code=201,
-        media_type="application/json"
+    return JSONResponse(
+        content={"Posts": serialized_stored_posts()},
+        status_code=201
+    )
+    
+@app.get("/posts")
+def list_posts():
+    return JSONResponse(
+        content={"Posts": serialized_stored_posts()},
+        status_code=200
     )
 
 
