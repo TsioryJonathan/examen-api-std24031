@@ -3,6 +3,8 @@ from starlette.responses import JSONResponse, Response
 from pydantic import BaseModel
 from typing import List
 from starlette.requests import Request
+from datetime import datetime
+import json
 
 app = FastAPI()
 
@@ -19,8 +21,38 @@ def read_home():
         status_code=200,
         media_type="text/html"
     )
+
+class PostModel(BaseModel):
+    author: str
+    title: str
+    content: str
+    creation_datetime: datetime
     
-    
+posts_list: List[PostModel] = []
+
+def serialized_stored_posts():
+    posts_converted = []
+    for post in posts_list:
+        to_append = {
+            "author": post.author,
+            "title": post.title,
+            "content": post.content,
+            "creation_datetime": post.creation_datetime.isoformat()
+        }
+        posts_converted.append(to_append)
+    return posts_converted
+
+@app.post("/posts")
+def create_post(posts: List[PostModel]):
+    for post in posts:
+        posts_list.append(post)
+    return Response(
+        content=json.dumps({"Posts": serialized_stored_posts()}),
+        status_code=201,
+        media_type="application/json"
+    )
+
+
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
     with open ("404.html" , "r" , encoding="utf-8") as file:
