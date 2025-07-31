@@ -74,6 +74,9 @@ def modify_post(posts: List[PostModel]):
         content={"Posts": serialized_stored_posts()},
         status_code=200
     )
+    
+
+
 
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
