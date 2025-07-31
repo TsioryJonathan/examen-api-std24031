@@ -48,3 +48,5 @@ tmp/
 
 # --- Docker ---
 docker-data/
+
+*.iml
