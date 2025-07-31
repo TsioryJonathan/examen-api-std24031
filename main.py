@@ -58,6 +58,22 @@ def list_posts():
         status_code=200
     )
 
+@app.put("/posts")
+def modify_post(posts: List[PostModel]):
+    for post in posts:
+        index = -1
+        for i, existing_post in enumerate(posts_list):
+            if existing_post.title == post.title:
+                index = i
+                break
+        if index == -1:
+            posts_list.append(post)
+        else:
+            posts_list[index] = post
+    return JSONResponse(
+        content={"Posts": serialized_stored_posts()},
+        status_code=200
+    )
 
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
