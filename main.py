@@ -10,6 +10,15 @@ app = FastAPI()
 def read_ping():
     return Response(content="pong", media_type="text/plain",status_code=200)
 
+@app.get("/home")
+def read_home():
+    with open("home.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+    return Response(
+        content=html_content,
+        status_code=200,
+        media_type="text/html"
+    )
 # class User(BaseModel):
 #     name:str
 #     age:int
